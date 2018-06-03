@@ -1,105 +1,80 @@
-if (!!$.prototype.justifiedGallery) { // if justifiedGallery method is defined
-    var options = {
-        rowHeight: 140,
-        margins: 4,
-        lastRow: 'justify'
-    };
-    $('.article-gallery').justifiedGallery(options);
-}
+$(document).ready(function(){
 
 
-$(window).load(function() {
+
+    //mobile menu toggling
+    $("#menu_icon").click(function(){
+        $("header nav ul").toggleClass("show_menu");
+        $("#menu_icon").toggleClass("close_menu");
+        return false;
+    });
+
     
-       $("#wrapper").fadeTo("slow",1);
-       $("#blogtitel").fadeOut(2000);
-});
 
-$(document).ready(function() {
+    //Contact Page Map Centering
+    var hw = $('header').width() + 50;
+    var mw = $('#map').width();
+    var wh = $(window).height();
+    var ww = $(window).width();
 
-
-    $(window).on('scroll', function() {
-
-        var z = $(".banner")[0].getBoundingClientRect().bottom / (
-            $(".banner")[0].getBoundingClientRect().bottom - $(".banner")[0].getBoundingClientRect().top)
-
-        if (z < 0) {
-            z = 0.01
-        }
-
-        $(".wrapper")[0].style.zoom = z
-        $(".wrapper")[0].style.MozTransform = "scale(" + z + ")"
-
+    $('#map').css({
+        "max-width" : mw,
+        "height" : wh
     });
 
-    $("#menu-icon, #menu-icon-tablet").click(function() {
-        if ($('#menu').css('visibility') == 'hidden') {
-            $('#menu').css('visibility', 'visible');
-            $('#menu-icon, #menu-icon-tablet').addClass('active');
-
-            var topDistance = $("#menu > #nav").offset().top;
-
-            $("#menu > #nav").show();
-            return false;
-        } else {
-            $('#menu').css('visibility', 'hidden');
-            $('#menu-icon, #menu-icon-tablet').removeClass('active');
-
-            return false;
-        }
-    });
-
-    /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
-    $("#header > #nav > ul > .icon").click(function() {
-        $("#header > #nav > ul").toggleClass("responsive");
-    });
-
-    if ($("#menu").length) {
-        $(window).on('scroll', function() {
-            var topDistance = $(window).scrollTop();
-
-            if ($('#menu').css('visibility') != 'hidden' && topDistance < 10) {
-                $("#menu > #nav").show();
-            } else if ($('#menu').css('visibility') != 'hidden' && topDistance > 10) {
-                $("#menu > #nav").hide();
-            }
-
-            if (!$("#menu-icon").is(":visible") && topDistance < 10) {
-
-                $("#menu-icon-tablet").show();
-                $("#top-icon-tablet").hide();
-            } else if (!$("#menu-icon").is(":visible") && topDistance > 10) {
-
-                $("#menu-icon-tablet").hide();
-                $("#top-icon-tablet").show();
-            }
+    if(ww>1100){
+         $('#map').css({
+            "margin-left" : hw
         });
     }
 
-    if ($("#footer-post").length) {
-        var lastScrollTop = 0;
-        $(window).on('scroll', function() {
-            var topDistance = $(window).scrollTop();
+   
 
-            if (topDistance > lastScrollTop) {
-                // downscroll code
-                $("#footer-post").hide();
-            } else {
-                // upscroll code
-                $("#footer-post").show();
-            }
-            lastScrollTop = topDistance;
 
-            $("#nav-footer").hide();
-            $("#toc-footer").hide();
-            $("#share-footer").hide();
 
-            if (topDistance < 50) {
-                $("#actions-footer > ul > #top").hide();
-                $("#actions-footer > ul > #menu").show();
-            } else if (topDistance > 100) {
-                $("#actions-footer > ul > #menu").hide();
-                $("#actions-footer > ul > #top").show();
-            }
-        });
-    }
+    //Tooltip
+    $("a").mouseover(function(){
+
+        var attr_title = $(this).attr("data-title");
+
+        if( attr_title == undefined || attr_title == "") return false;
+        
+        $(this).after('<span class="tooltip"></span>');
+
+        var tooltip = $(".tooltip");
+        tooltip.append($(this).data('title'));
+
+         
+        var tipwidth = tooltip.outerWidth();
+        var a_width = $(this).width();
+        var a_hegiht = $(this).height() + 3 + 4;
+
+        //if the tooltip width is smaller than the a/link/parent width
+        if(tipwidth < a_width){
+            tipwidth = a_width;
+            $('.tooltip').outerWidth(tipwidth);
+        }
+
+        var tipwidth = '-' + (tipwidth - a_width)/2;
+        $('.tooltip').css({
+            'left' : tipwidth + 'px',
+            'bottom' : a_hegiht + 'px'
+        }).stop().animate({
+            opacity : 1
+        }, 200);
+       
+
+    });
+
+    $("a").mouseout(function(){
+        var tooltip = $(".tooltip");       
+        tooltip.remove();
+    });
+
+
 });
+
+
+
+
+
